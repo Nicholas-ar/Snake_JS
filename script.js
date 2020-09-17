@@ -8,6 +8,10 @@ snake[0] = {
 };
 
 let direction = "right";
+let foodCoordinates = {
+  x: Math.floor(Math.random() * 15 + 1) * box,
+  y: Math.floor(Math.random() * 15 + 1) * box,
+};
 
 document.addEventListener("keydown", update);
 
@@ -38,6 +42,11 @@ function createSnake() {
   }
 }
 
+function createFood() {
+  context.fillStyle = "red";
+  context.fillRect(foodCoordinates.x, foodCoordinates.y, box, box);
+}
+
 function initGame() {
   if (snake[0].x > 15 * box && direction == "right") {
     snake[0].x = 0;
@@ -53,6 +62,7 @@ function initGame() {
   }
   createBG();
   createSnake();
+  createFood();
 
   let snakeXPosition = snake[0].x;
   let snakeYPosition = snake[0].y;
@@ -70,7 +80,15 @@ function initGame() {
     snakeYPosition += box;
   }
 
-  snake.pop();
+  if (
+    snakeXPosition != foodCoordinates.x ||
+    snakeYPosition != foodCoordinates.y
+  ) {
+    snake.pop();
+  } else {
+    foodCoordinates.x = Math.floor(Math.random() * 15 + 1) * box;
+    foodCoordinates.y = Math.floor(Math.random() * 15 + 1) * box;
+  }
 
   let newHead = {
     x: snakeXPosition,
@@ -80,4 +98,4 @@ function initGame() {
   snake.unshift(newHead);
 }
 
-let jogo = setInterval(initGame, 100);
+let gameLoop = setInterval(initGame, 100);
